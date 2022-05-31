@@ -1,4 +1,4 @@
-# buildspace Store on Solana Pay Project
+# Emoji Store on Solana Pay Project
 
 ### **Welcome 👋**
 
