@@ -4,7 +4,7 @@ import { createTransferCheckedInstruction, getAssociatedTokenAddress, getMint } 
 import BigNumber from "bignumber.js";
 import products from "./products.json";
 
-const usdcAddress = new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr");
+const usdcAddress = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1vr");
 const sellerAddress = '8UPAzETo4tz7v9k7FiKoLSm4rS3e51ouJzxEAfQUrJ97'
 const sellerPublicKey = new PublicKey(sellerAddress);
 
