@@ -1,15 +1,15 @@
-import React, { useState, useMemo } from "react";
-import { Keypair, Transaction } from "@solana/web3.js";
-import { findReference, FindReferenceError } from "@solana/pay";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { InfinitySpin } from "react-loader-spinner";
-import IPFSDownload from "./IpfsDownload";
-import { useEffect } from "react/cjs/react.production.min";
+import React, { useState, useEffect, useMemo } from 'react';
+import { Keypair, Transaction } from '@solana/web3.js';
+import { findReference, FindReferenceError } from '@solana/pay';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { InfinitySpin } from 'react-loader-spinner';
+import IPFSDownload from './IpfsDownload';
+import { addOrder } from '../lib/api';
 
 const STATUS = {
-  Initial: "Initial",
-  Submitted: "Submitted",
-  Paid: "Paid,"
+  Initial: 'Initial',
+  Submitted: 'Submitted',
+  Paid: 'Paid',
 };
 
 export default function Buy({ itemID }) {
@@ -17,10 +17,9 @@ export default function Buy({ itemID }) {
   const { publicKey, sendTransaction } = useWallet();
   const orderID = useMemo(() => Keypair.generate().publicKey, []); // Public key used to identify the order
 
-  const [loading, setLoading] = useState(false); // Loading state of all above
-  const [status, setStatus] = useState(STATUS.Initial); // Status of the transaction
-  
-  // useMemo is a React hook that only computes the value if the dependencies change
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(STATUS.Initial); // Tracking transaction status
+
   const order = useMemo(
     () => ({
       buyer: publicKey.toString(),
@@ -30,28 +29,25 @@ export default function Buy({ itemID }) {
     [publicKey, orderID, itemID]
   );
 
-  // Fetch the transaction object from the server 
   const processTransaction = async () => {
     setLoading(true);
-    const txResponse = await fetch("../api/createTransaction", {
-      method: "POST",
+    const txResponse = await fetch('../api/createTransaction', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(order),
     });
     const txData = await txResponse.json();
-    
-    // We create a transaction object
-    const tx = Transaction.from(Buffer.from(txData.transaction, "base64"));
-    console.log("Tx data is", tx);
-    
-    // Attempt to send the transaction to the network
+
+    const tx = Transaction.from(Buffer.from(txData.transaction, 'base64'));
+    console.log('Tx data is', tx);
+
     try {
-      // Send the transaction to the network
       const txHash = await sendTransaction(tx, connection);
-      console.log(`Transaction sent: https://solscan.io/tx/${txHash}?cluster=devnet`);
-      // Even though this could fail, we're just going to set it to true for now
+      console.log(
+        `Transaction sent: https://solscan.io/tx/${txHash}?cluster=devnet`
+      );
       setStatus(STATUS.Submitted);
     } catch (error) {
       console.error(error);
@@ -66,22 +62,23 @@ export default function Buy({ itemID }) {
       setLoading(true);
       const interval = setInterval(async () => {
         try {
-          // Look for our orderID on the blockchain
           const result = await findReference(connection, orderID);
-          console.log("Finding tx reference", result.confirmationStatus);
-          
-          // If the transaction is confirmed or finalized, the payment was successful!
-          if (result.confirmationStatus === "confirmed" || result.confirmationStatus === "finalized") {
+          console.log('Finding tx reference', result.confirmationStatus);
+          if (
+            result.confirmationStatus === 'confirmed' ||
+            result.confirmationStatus === 'finalized'
+          ) {
             clearInterval(interval);
             setStatus(STATUS.Paid);
             setLoading(false);
-            alert("Thank you for your purchase!");
+            addOrder(order);
+            alert('Thank you for your purchase!');
           }
         } catch (e) {
           if (e instanceof FindReferenceError) {
             return null;
           }
-          console.error("Unknown error", e);
+          console.error('Unknown error', e);
         } finally {
           setLoading(false);
         }
@@ -107,9 +104,17 @@ export default function Buy({ itemID }) {
   return (
     <div>
       {status === STATUS.Paid ? (
-        <IPFSDownload filename="emojis.zip" hash="QmWWH69mTL66r3H8P4wUn24t1L5pvdTJGUTKBqT11KCHS5" cta="Download emojis"/>
+        <IPFSDownload
+          filename="emojis.zip"
+          hash="QmWWH69mTL66r3H8P4wUn24t1L5pvdTJGUTKBqT11KCHS5"
+          cta="Download emojis"
+        />
       ) : (
-        <button disabled={loading} className="buy-button" onClick={processTransaction}>
+        <button
+          disabled={loading}
+          className="buy-button"
+          onClick={processTransaction}
+        >
           Buy now 🠚
         </button>
       )}
