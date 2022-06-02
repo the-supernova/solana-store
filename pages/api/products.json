@@ -1,11 +1,29 @@
 [
-    {
-      "id": 1,
-      "name": "OG Emoji pack",
-      "price": "0.09",
-      "description": "Get this fire emoji pack for only $0.09! Includes 3 hot emojis: Forreal, Flooshed, and Sheesh!",
-      "image_url": "https://i.imgur.com/rVD8bjt.png",
-      "filename": "Emojis.zip",
-      "hash": "QmWWH69mTL66r3H8P4wUn24t1L5pvdTJGUTKBqT11KCHS5"
-    }
+  {
+    "id": 1,
+    "name": "OG Emoji pack",
+    "price": "0.09",
+    "description": "Get this fire emoji pack for only $0.09! Includes 3 hot emojis: Forreal, Flooshed, and Sheesh!",
+    "image_url": "https://i.imgur.com/rVD8bjt.png",
+    "filename": "Emojis.zip",
+    "hash": "QmWWH69mTL66r3H8P4wUn24t1L5pvdTJGUTKBqT11KCHS5"
+  },
+  {
+    "id": 2,
+    "name": "Top Notch Resume",
+    "price": "",
+    "image_url": "",
+    "description": "Roadmap to MAANG",
+    "filename": "AbhijitResume_Feb22.pdf",
+    "hash": "QmQcnqrCP3RNJPyCqu87yqNnv7SRCwZKCXgcdFgYVw1PQq"
+  },
+  {
+    "id": 3,
+    "name": "Code editor NFT",
+    "price": "0.09 USDC",
+    "image_url": "https://i.imgur.com/rVD8bjt.png",
+    "description": "Grab it!",
+    "filename": "Screenshot from 2022-06-02 20-24-30.png",
+    "hash": "Qmexre4ZoAqZjQdaGHyPqFBsR5eW2FEA1kf2zfYL3dBK7q"
+  }
 ]
